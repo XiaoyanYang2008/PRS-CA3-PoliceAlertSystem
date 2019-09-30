@@ -79,35 +79,93 @@ we also convert signals to mfcc representation, apply mean on each mfcc stream a
 
 Please refers experimental results section for details.
 
-\section{Experimental results}
+
 \label{sec:experimental results}
-\subsection{Data preprocessing and analysis}
+\section{Data preprocessing and analysis}
 URBANSOUND8K DATASET\cite{URBANSOUND8K-DATASET} contains 8732 labeled sounds of 10 classes:
 air\_conditioner, car\_horn, children\_playing, dog\_bark, drilling, enginge\_idling, gun\_shot, jackhammer, siren, and street\_music.
-The sounds are of various sampling rate as well as sampling rate. We utilize librose to convert sampling rate to 22kHz and mono channel. As for sound duration that's less than 4 seconds, we concatenates the sound itself until it fills up the 4 seconds duration.
+The sounds are of various sampling rate as well as sampling rate. We utilize librose to convert sampling rate to 22kHz and mono channel. 
 
-\begin{figure}[tbh]
+\begin{figure}[h]
 	\centerline{\begin{tabular}{cc|c}
 			\includegraphics[width=7cm]{figures/data-loading.png}
 	\end{tabular}}
 	\caption{sound data loading, multiprocessing.\label{figure1}}
 \end{figure}
 
-\begin{figure}[tbh]
+As for sound duration that's less than 4 seconds, we concatenates the sound itself until it fills up the 4 seconds duration.
+
+\begin{figure}[h]
 	\centerline{\begin{tabular}{cc|c}
 			\includegraphics[width=7cm]{figures/self-repeatUntil4secs.png}
 	\end{tabular}}
-	\caption{self repeating to fill up to 4 seconds.\label{figure1}}
+	\caption{self repeating to fill up to 4 seconds.\label{figure2}}
+\end{figure}
+
+We also plot and listen to a few gun shots and other sound files.
+\begin{figure}[h]
+	\centerline{\begin{tabular}{cc|c}
+			\includegraphics[width=7cm]{figures/plotAndPlaySounds.png}
+	\end{tabular}}
+	\caption{Plot and listen some sound files.\label{figure3}}
 \end{figure}
 
 
+\section{Experimental results}
+
 \subsection{Conv1D deep neural network classification}
 
+
+
+
 \subsection{Auto encoder anomaly detection}
+Based on 4 seconds self-repeat sound, we construct Autoencoder and train with sounds sample without gun shots. Below is the code snipet for the Auto encoder network.
+
+\begin{figure}[h]
+	\centerline{\begin{tabular}{cc|c}
+			\includegraphics[width=7cm]{figures/auto-encoder-network.png}
+	\end{tabular}}
+	\caption{Auto encoder network.\label{figure4}}
+\end{figure}
+\begin{figure}[h]
+	\centerline{\begin{tabular}{cc|c}
+			\includegraphics[width=7cm]{figures/autoencoder-training-summary.png}
+	\end{tabular}}
+	\caption{Auto encoder network training and its structure\label{figure5}}
+\end{figure}
+
+By training Auto encoder network with non gun shots sound data, we hope that gun shots sound will be recognized as anomaly to the network. Due to 4 seconds and sampling rate of 22kHz, our data will be 1D arrary of 88.200k samples. From Fig. \ref{figure5}, layer1, which is the innermost layer of under complete neural network, it has only 8 neurons. However, the performance may not be bad than network with more neurons, which we will share more later.
+
+The code to analysis performance of training data and gun shot(noise, test) anomaly detection is as below. 
+
+\begin{figure}[h]
+	\centerline{\begin{tabular}{cc|c}
+			\includegraphics[width=7cm]{figures/autoencoded-8-31.png}
+	\end{tabular}}
+	\caption{Auto encoder performance analysis code snipet\label{figure6}}
+\end{figure}
+Based on the errors collected from network prediction on training data and gun shot data, we calculate mean and standard deviation, std. With 95\% confidence level as guideline, we set the threshold to mean+2*std, which is 62.17.
+
+\begin{figure}[h]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{figures/autoencoder-8-31-result.png}
+	\end{tabular}}
+	\caption{Auto encoder performance analysis\label{figure7}}
+\end{figure}
+
+With threshold of 62.17, we found out that only 4.2\% of training data is abnormal, whereas gun shot data anomaly rate is about 30.48\% at 95\% confidence level.
+
+
 
 \subsection{LSTM neural network classifcation}
 
+
+
+
 \subsection{mfcc representation and neural network classification}
+
+
+
 
 
 %\begin{equation}\label{equation block model}
@@ -130,7 +188,7 @@ The sounds are of various sampling rate as well as sampling rate. We utilize lib
         &\includegraphics[width=3cm]{iss.png}& text\\
     (a) & (b) & (c)
     \end{tabular}}
-    \caption{Test figure (single column).\label{figure2}}
+    \caption{Test figure (single column).\label{figureZZZ}}
 \end{figure}
 
 \begin{table}[tbh]
