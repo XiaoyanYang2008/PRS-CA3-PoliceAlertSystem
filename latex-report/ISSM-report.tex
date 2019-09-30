@@ -45,11 +45,11 @@ URBANSOUND8K DATASET, long short-term memory, auto encoder, mfcc, conv1D, MaxPoo
 Dangerous weapons can be a source of dangerous in a safe country.  Gun shots become more dangerous in neighbourhood area, due to less awareness in public. It is critical to maintain safety here and automate alerting mechanism to Police will be time and life saving. It is easpecially the case that police station may be far away from the incident area and they do not get alerted unless civilians reported it to them. Even with reports, the actual sound about the incident is lost and therefore losing original data.
 
 
-\begin{itemize}
-  \item The main report is provided in *.tex file
-  \item The reference is provided in *.bib file
-  \item The figures are provided as separate jpg/png files
-\end{itemize}
+% \begin{itemize}
+%  \item The main report is provided in *.tex file
+%  \item The reference is provided in *.bib file
+%  \item The figures are provided as separate jpg/png files
+% \end{itemize}
 
 
 \section{Related work}
@@ -66,7 +66,15 @@ Mike's work \cite{MikeSmalesSoundClassificationusingDeepLearning} on 2d convolut
 
 \section{Proposed approach}
 \label{sec:proposed approach}
+Based on the nature that all sounds wave files are 1 dimensional signals, sampling at different frequencies, we retrieved wave data via librosa library at default 22khz sampling rate.
 
+We concatenates signals itself to 4 seconds long as signal feature.
+
+We feed the signals to conv1d, auto-encoder, LSTM network for classification.
+
+we also convert signals to mfcc format, apply mean on each mfcc stream and 3 layers dense neural network for classification.
+
+Please refers experimental results section for details.
 
 \section{Experimental results}
 \label{sec:experimental results}
