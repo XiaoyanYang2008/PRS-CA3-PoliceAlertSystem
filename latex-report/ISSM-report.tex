@@ -3,7 +3,7 @@
 %          IEEEbib.bst - IEEE bibliography style file.
 % --------------------------------------------------------------------------
 \documentclass{article}
-\usepackage{spconf,amsmath,graphicx}
+\usepackage{spconf,amsmath,graphicx,titlesec}
 
 % Example definitions.
 % --------------------
@@ -57,7 +57,8 @@ Dangerous weapons can be a source of dangerous in a safe country.  Gun shots bec
 % Discuss published works or online references that relate to your project, such as \cite{adams1995hitchhiker}
 % \cite{MikeSmalesSoundClassificationusingDeepLearning}
 
-We download URBANSOUND8K DATASET from https://urbansounddataset.weebly.com/urbansound8k.html for analysis and model training.
+We download URBANSOUND8K DATASET from \cite{URBANSOUND8K-DATASET} for analysis and classification models training. URBANSOUND8K DATASET was processed for \cite{Salamon:UrbanSound:ACMMM:14} research.
+
 
 We also refer to Ricky Kim's articles about UrbanSound Classification Part 1 \cite{RickyKimUrbanSoundClassificationPart1soundwavedigitalaudiosignal} and Part 2 \cite{RickyKimUrbanSoundClassificationPart2samplerateconversionLibrosa} for initial understanding of datasets. 
 
@@ -72,25 +73,34 @@ We concatenates signals itself to 4 seconds long as signal feature.
 
 We feed the signals to conv1d, auto-encoder, LSTM network for classification.
 
-we also convert signals to mfcc format, apply mean on each mfcc stream and 3 layers dense neural network for classification.
+we also convert signals to mfcc representation, apply mean on each mfcc stream and 3 layers dense neural network for classification.
 
 Please refers experimental results section for details.
 
 \section{Experimental results}
 \label{sec:experimental results}
 
-\begin{equation}\label{equation block model}
-B_{r,c}=\sum\{f(i,j)|(i,j)\in \Omega_{r,c}\}.
-\end{equation}
-\begin{equation}\label{equation 1}
-\sum_{x}=a+b+\hat{c},
-\end{equation}
+\subsection{Conv1D deep neural network classification}
 
-An inline equation is $a+b=c$. An example of two-column figure is provided in Figure \ref{figure1}, and the single-column figures is provided in Figure \ref{figure2}.
+\subsection{Auto encoder anomaly detection on gun shots}
 
-\begin{figure*}[tbh]\includegraphics[width=15cm]{iss.png}
-    \caption{Test figure (two-column).\label{figure1}}
-\end{figure*}
+\subsection{LSTM neural network classifcation}
+
+\subsection{mfcc representation and neural network classification}
+
+
+%\begin{equation}\label{equation block model}
+%B_{r,c}=\sum\{f(i,j)|(i,j)\in \Omega_{r,c}\}.
+%\end{equation}
+%\begin{equation}\label{equation 1}
+%\sum_{x}=a+b+\hat{c},
+%\end{equation}
+
+%An inline equation is $a+b=c$. An example of two-column figure is provided in Figure \ref{figure1}, and the single-column figures is provided in Figure \ref{figure2}.
+
+%\begin{figure*}[tbh]\includegraphics[width=15cm]{iss.png}
+%    \caption{Test figure (two-column).\label{figure1}}
+%\end{figure*}
 
 
 \begin{figure}[tbh]
