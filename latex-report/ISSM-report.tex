@@ -109,7 +109,42 @@ We also plot and listen to a few gun shots and other sound files.
 	\end{tabular}}
 	\caption{Plot and listen some sound files.\label{figure3}}
 \end{figure}
-
+There are ten classes in the data. They have different length of waves. After data extraction,need to ensure all the data has same size. We have use two methods to resize the waveform, one method is padding zero and another method is repeat the wave forms until the max. below figures show the plots before and after resizing use the two method.Blue color plots are the raw wave forms, green plots applied zero padding and yellow applied repeating.
+\begin{figure}[!htb]
+    \begin{tabular}{ccc}
+        \includegraphics[width=2cm]{pic/AC_RW.png}
+        &\includegraphics[width=2cm]{pic/AC_RSD.png}
+        &\includegraphics[width=2cm]{pic/AC_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/CH_RW.png}
+        &\includegraphics[width=2cm]{pic/CH_RSD.png}
+        &\includegraphics[width=2cm]{pic/CH_RSP.png}\\
+        \includegraphics[width=2cm]{pic/CP_RW.png}
+        &\includegraphics[width=2cm]{pic/CP_RSD.png}
+        &\includegraphics[width=2cm]{pic/CP_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/DB_RW.png}
+        &\includegraphics[width=2cm]{pic/DB_RSD.png}
+        &\includegraphics[width=2cm]{pic/DB_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/DL_RW.png}
+        &\includegraphics[width=2cm]{pic/DL_RSD.png}
+        &\includegraphics[width=2cm]{pic/DL_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/EI_RW.png}
+        &\includegraphics[width=2cm]{pic/EI_RSD.png}
+        &\includegraphics[width=2cm]{pic/EI_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/GS_RW.png}
+        &\includegraphics[width=2cm]{pic/GS_RSD.png}
+        &\includegraphics[width=2cm]{pic/GS_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/JH_RW.png}
+        &\includegraphics[width=2cm]{pic/JH_RSD.png}
+        &\includegraphics[width=2cm]{pic/JH_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/SI_RW.png}
+        &\includegraphics[width=2cm]{pic/SI_RSD.png}
+        &\includegraphics[width=2cm]{pic/SI_RSRP.png}\\
+        \includegraphics[width=2cm]{pic/SMC_RW.png}
+        &\includegraphics[width=2cm]{pic/SMC_RSD.png}
+        &\includegraphics[width=2cm]{pic/SMC_RSRP.png}\\
+    (raw wave) & (resize with zeros) &(resize with repeating)
+    \end{tabular}
+\end{figure}
 
 \section{Experimental results}
 
