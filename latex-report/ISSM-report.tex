@@ -144,6 +144,7 @@ There are ten classes in the data. They have different length of waves. After da
         &\includegraphics[width=2cm]{pic/SMC_RSRP.png}\\
     (raw wave) & (resize with zeros) &(resize with repeating)
     \end{tabular}
+	\caption{sounds types, and 2 resizing schemes to 4 seconds.\label{figure4}}
 \end{figure}
 
 \newpage
@@ -154,22 +155,22 @@ We constructed a four layers of Convolutional Neural Networks model for the wave
 \begin{figure}[!htb]
     \begin{tabular}{c}
         \includegraphics[width=8cm]{pic/CNN_Create.png}\\
-    (Figure.model layers)
     \end{tabular}
+	\caption{model layers.\label{figure5}}
 \end{figure}
 \begin{figure}[!htb]
     \begin{tabular}{c}
         \includegraphics[width=8cm]{pic/CNN_Sum.png}\\
-    (Figure. model summary)
     \end{tabular}
+	\caption{Model summary.\label{figure6}}
 \end{figure}
 \newpage
 After data training and validation, the accuracy and the loss function showed training has good result but validation not.
 \begin{figure}[!htb]
     \begin{tabular}{c}
         \includegraphics[width=7cm]{pic/CNN_Pm.png}\\
-    (Figure. CNN accuracy score and confusion matrix)
     \end{tabular}
+	\caption{ CNN accuracy score and confusion matrix\label{figure7}}
 \end{figure}
 \newpage
 We used a test data set did a prediction for the sounds classes, the result is 24.37\%. The gun shot prediction is 66.67\%.
@@ -177,8 +178,9 @@ We used a test data set did a prediction for the sounds classes, the result is 2
     \begin{tabular}{cc}
         \includegraphics[width=4cm]{pic/CNN_ACC.png}
         &\includegraphics[width=4cm]{pic/CNN_LOSS.PNG}\\
-    (Figure.model accuracy)&(Figure.model loss)
+    (model accuracy)&(model loss)
     \end{tabular}
+	\caption{Model accuracy and model loss\label{figure7}}
 \end{figure}
 \newpage
 Since our system is to check the dangerous sound (gun shot), we grouped non gun shot sounds as one class and gun shot as one class. Did another training for the data.
@@ -187,16 +189,17 @@ We used the test data set did a prediction for the sounds classes, the result is
 \begin{figure}[!htb]
 	\begin{tabular}{c}
 		\includegraphics[width=7cm]{pic/CNN_Pm_V2.PNG}\\
-		(Figure. CNN accuracy score and confusion matrix)
 	\end{tabular}
+	\caption{CNN accuracy score and confusion matrix\label{figure8}}
 \end{figure}
 
 \begin{figure}[!htb]
 	\begin{tabular}{cc}
 		\includegraphics[width=4cm]{pic/CNN_ACC_V2.PNG}
 		&\includegraphics[width=4cm]{pic/CNN_Loss_V2.PNG}\\
-		(Figure.model accuracy)&(Figure.model loss)
+		(model accuracy)&(model loss)
 	\end{tabular}
+	\caption{Model accuracy and model loss\label{figure9}}
 \end{figure}
 The accuracy of CNN is not good, we switch to other models.
 
@@ -208,16 +211,16 @@ Based on 4 seconds self-repeat sound, we construct autoencoder and train with so
 	\centerline{\begin{tabular}{c}
 			\includegraphics[width=7cm]{pic/auto-encoder-network.png}
 	\end{tabular}}
-	\caption{Autoencoder network.\label{figure4}}
+	\caption{Autoencoder network.\label{figure10}}
 \end{figure}
 \begin{figure}[ht]
 	\centerline{\begin{tabular}{c}
 			\includegraphics[width=7cm]{pic/autoencoder-training-summary.png}
 	\end{tabular}}
-	\caption{Autoencoder network training and its structure\label{figure5}}
+	\caption{Autoencoder network training and its structure\label{figure11}}
 \end{figure}
 
-By training autoencoder network with non gun shots sound data, we hope that gun shots sound will be recognized as anomaly to the network. Due to 4 seconds and sampling rate of 22kHz, our data will be 1D arrary of 88.200k samples. From Fig. \ref{figure5}, layer1, which is the innermost layer of undercomplete autoencoder neural network, it has only 8 neurons.
+By training autoencoder network with non gun shots sound data, we hope that gun shots sound will be recognized as anomaly to the network. Due to 4 seconds and sampling rate of 22kHz, our data will be 1D arrary of 88.200k samples. From Fig. \ref{figure11}, layer1, which is the innermost layer of undercomplete autoencoder neural network, it has only 8 neurons.
 
 The code to analyse performance of training data and gun shot(noise, test) anomaly detection is as below. 
 
@@ -225,7 +228,7 @@ The code to analyse performance of training data and gun shot(noise, test) anoma
 	\centerline{\begin{tabular}{c}
 			\includegraphics[width=7cm]{pic/autoencoded-8-31.png}
 	\end{tabular}}
-	\caption{Auto encoder performance analysis code snipet\label{figure6}}
+	\caption{Auto encoder performance analysis code snipet\label{figure12}}
 \end{figure}
 Based on the errors collected from network prediction on training data and gun shot data, we calculate mean and standard deviation, std. With 95\% confidence level as guideline, we set the threshold to mean+2*std, which is 62.17.
 
@@ -235,10 +238,10 @@ Based on the errors collected from network prediction on training data and gun s
 	\centerline{\begin{tabular}{c}
 			\includegraphics[width=7cm]{pic/autoencoder-8-31-result.png}
 	\end{tabular}}
-	\caption{Autoencoder performance analysis\label{figure7}}
+	\caption{Autoencoder performance analysis\label{figure13}}
 \end{figure}
 
-With threshold of 62.17 in Fig. \ref{figure7}, we found out that only 4.2\% of training data is anomaly, whereas gun shot data anomaly rate is about 30.48\% at 95\% confidence level. 
+With threshold of 62.17 in Fig. \ref{figure13}, we found out that only 4.2\% of training data is anomaly, whereas gun shot data anomaly rate is about 30.48\% at 95\% confidence level. 
 
 Though the performance is not amazing compared to other methods in later parts of experiements. It is interesting that autoencoder can detect anomaly even within its own training data. It is useful that when we don't have much labelled data but unsupervised learning like this, helps to point out anomaly.
 
@@ -248,22 +251,28 @@ We also notice another counter intuitive perspective about autoencoder. For neur
 	\centerline{\begin{tabular}{c}
 			\includegraphics[width=7cm]{pic/autoencoder-800.png}
 	\end{tabular}}
-	\caption{Autoencoder with 800 innermost layer \label{figure8}}
+	\caption{Autoencoder with 800 innermost layer \label{figure14}}
 \end{figure}
 However, this is not the case for autoencoder. We configure 100x more neurons for innermost layer, and spend more times on compute. And here is the performance of the network,
 \begin{figure}[ht]
 	\centerline{\begin{tabular}{c}
 			\includegraphics[width=7cm]{pic/autoencoder-800-performance.png}
 	\end{tabular}}
-	\caption{Performance of Autoencoder with 800 innermost layer \label{figure8}}
+	\caption{Performance of Autoencoder with 800 innermost layer \label{figure15}}
 \end{figure}
 
 The performance on gunshot anomaly detection is only 4.8\%, which is only 16\% of 8 neurons network. Therefore, more under-complete autoencoder network likely pressing the neural network to perform better.
 
 
-
+\newpage
 \subsection{LSTM neural network classifcation}
-
+Long short-term memory neural network is another typical tool to handle 1D time series data. Below is the network structure we deploy for classification model training.
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/autoencoder-800-performance.png}
+	\end{tabular}}
+	\caption{Performance of Autoencoder with 800 innermost layer \label{figure16}}
+\end{figure}
 
 
 
