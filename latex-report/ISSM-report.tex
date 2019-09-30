@@ -5,10 +5,12 @@
 \documentclass{article}
 \usepackage{spconf,amsmath,graphicx,titlesec}
 
+    
 % Example definitions.
 % --------------------
 \def\x{{\mathbf x}}
 \def\L{{\cal L}}
+
 
 % Title.
 % ------
@@ -71,7 +73,7 @@ Based on the nature that all sounds wave files are 1 dimensional signals, sampli
 
 We concatenates signals itself to 4 seconds long as signal feature.
 
-We feed the signals to conv1d, auto-encoder, LSTM network for classification.
+We feed the signals to conv1d, auto-encoder, and LSTM networks for classification.
 
 we also convert signals to mfcc representation, apply mean on each mfcc stream and 3 layers dense neural network for classification.
 
@@ -79,10 +81,29 @@ Please refers experimental results section for details.
 
 \section{Experimental results}
 \label{sec:experimental results}
+\subsection{Data preprocessing and analysis}
+URBANSOUND8K DATASET\cite{URBANSOUND8K-DATASET} contains 8732 labeled sounds of 10 classes:
+air\_conditioner, car\_horn, children\_playing, dog\_bark, drilling, enginge\_idling, gun\_shot, jackhammer, siren, and street\_music.
+The sounds are of various sampling rate as well as sampling rate. We utilize librose to convert sampling rate to 22kHz and mono channel. As for sound duration that's less than 4 seconds, we concatenates the sound itself until it fills up the 4 seconds duration.
+
+\begin{figure}[tbh]
+	\centerline{\begin{tabular}{cc|c}
+			\includegraphics[width=7cm]{figures/data-loading.png}
+	\end{tabular}}
+	\caption{sound data loading, multiprocessing.\label{figure1}}
+\end{figure}
+
+\begin{figure}[tbh]
+	\centerline{\begin{tabular}{cc|c}
+			\includegraphics[width=7cm]{figures/self-repeatUntil4secs.png}
+	\end{tabular}}
+	\caption{self repeating to fill up to 4 seconds.\label{figure1}}
+\end{figure}
+
 
 \subsection{Conv1D deep neural network classification}
 
-\subsection{Auto encoder anomaly detection on gun shots}
+\subsection{Auto encoder anomaly detection}
 
 \subsection{LSTM neural network classifcation}
 
@@ -116,7 +137,7 @@ Please refers experimental results section for details.
 \caption{The performance comparison.}\label{table1} \centerline{
     \begin{tabular}{clc|r}
     \hline\hline
-    Approach & Ref. \cite{adams1995hitchhiker} & Ref. \cite{adams1995hitchhiker} & Proposed approach\\
+    Approach & Ref.  & Ref. \cite{URBANSOUND8K-DATASET} & Proposed approach\\
     Metric A & $0.8181$ & $0.9171$ & $0.9616$ \\\hline
     Metric B & $0.8236$ & $0.7654$ & $0.8615$ \\\hline
     \end{tabular}
