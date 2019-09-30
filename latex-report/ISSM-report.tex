@@ -318,7 +318,308 @@ From figure below, we observe that our LSTM model achieve 78.69\% accuracy on va
 
 
 \newpage
-\subsection{mfcc representation and neural network classification}
+\subsection{MFCC representation and neural network classification}
+
+In the earlier model using CNN, we were extracting each audio file as a floating point time series to train our model. However, this method does not capture envelope of the short time power spectrum characteristics of the audio. As such, we decided to use MFCC feature extraction function in librosa as per \cite{MikeSmalesSoundClassificationusingDeepLearning}. However, we are different in that we MFCC our audio file and load the mean of each MFCC bin, into our Neural network (NN) model to see if model accuracy improved.
+
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+ num\_epochs = 100 \\
+ num\_batch\_size = 32 \\
+ seed = 29 \\
+ np.random.seed(seed) \\
+ \hline
+\end{tabular}
+\end{center}
+
+Based on the code that we referenced from , we started our training by extracting MFCC feature of our audio file into 40 "bins".
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC_extract_audio_features_from.png}
+	\end{tabular}}
+\end{figure}
+
+Let's take a look at MFCC spectrogram of 2 audio files, namely Children Playing and Gun Shot.
+\newpage
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC_children_play_spectrogram.png}
+	\end{tabular}}
+	\caption{Spectrogram of Children Playing audio \label{figure18}}
+\end{figure}
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC_gunshot_spectrogram.png}
+	\end{tabular}}
+	\caption{Spectrogram of Gun Shot audio \label{figure19}}
+\end{figure}
+
+
+You can see these 2 audio files have very different spectrogram where
+gunshot has a high pitch at the beginning of the audio file. With that,
+we will start training our model.
+
+
+As our class label is categorical value, we need to do a one time label encoding to cover them to numeric for our model to work.
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+ le = LabelEncoder() \\
+ yy = to\_categorical(le.fit\_transform(y)) \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+We split the dataset to 70\%, 20\% and 10\% for training, validation and testing purpose respectively.
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+    mask = np.random.rand(len(data)) \\
+    train\_mask = mask < 0.7 \\
+    validation\_mask = np.logical\_and(mask > 0.7, mask < 0.9) \\
+    test\_mask = mask > 0.9 \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+For the training, we are using a CNN model. As the model is to predict
+and classify to 10 audio classes, our model final output layer will be
+10.
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+model =  Sequential() \\
+model.add(Dense(256, input\_shape=(n\_mfcc,))) \\
+model.add(Activation("relu")) \\
+model.add(Dropout(0.25)) \\
+model.add(Dense(64)) \\
+model.add(Activation("relu")) \\
+model.add(Dropout(0.25)) \\
+model.add(Dense(128)) \\
+model.add(Activation("relu")) \\
+model.add(Dropout(0.25)) \\
+model.add(Dense(256)) \\
+model.add(Activation("relu")) \\
+model.add(Dropout(0.25)) \\
+model.add(Dense(512)) \\
+model.add(Activation(\"relu")) \\
+model.add(Dropout(0.5)) \\
+model.add(Dense(yy.shape[1])) \\
+model.add(Activation("softmax")) \\
+model.compile(loss="categorical\_crossentropy", \\
+            metrics=["accuracy"], optimizer="adam") \\
+model.summary() \\
+\\
+history=  model.fit(x\_train, y\_train, \\
+            batch\_size=num\_batch\_size, \\
+            epochs=num\_epochs, \\
+            validation\_data=(x\_valid, y\_valid), \\
+            callbacks=[checkpointer], \\
+            verbose=1)\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC40_CNN_Model.png}
+	\end{tabular}}
+	\caption{CNN Model for n\_mfcc=40 \label{figure20}}
+\end{figure}
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+score=model.evaluate(x\_train,y\_train,verbose=0) \\
+score=model.evaluate(x\_test,y\_test,verbose=0) \\
+\\
+Training Accuracy:  0.92509854\\
+Testing Accuracy:  0.8630435\\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC40_Epoch_Accuracy.png}
+	\end{tabular}}
+	\caption{Accuracy for CNN Model with n\_mfcc=40 \label{figure21}}
+\end{figure}
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC40_Epoch_Loss.png}
+	\end{tabular}}
+	\caption{Loss for CNN Model with n\_mfcc=40 \label{figure22}}
+\end{figure}
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC40_CNN_Model_Test_Accuracy_Grid.png}
+	\end{tabular}}
+\end{figure}
+
+\newpage
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC40_confusion_matrix.png}
+	\end{tabular}}
+	\caption{Confusion Matrix for CNN Model with n\_mfcc=40 \label{figure23}}
+\end{figure}
+
+
+
+Using MFCC features of the audio files for training, has improved the model overall accuracy, from 24.26\% to 86.30\%. And looking at the confusion matrix, we can see a small number of audio files were missed classified. Let's take a quick look some of them.
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC_Drilling_spectogram.png}
+	\end{tabular}}
+	\caption{Spectrogram for a Drilling audio \label{figure24}}
+\end{figure}
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC_Car_Horn_spectogram.png}
+	\end{tabular}}
+	\caption{Spectrogram for a Drilling audio \label{figure25}}
+\end{figure}
+
+\newpage
+With the classifier model, we are going to test it using a audio file where we created by overlaying a gunshot audio on top of a children playing audio at 6.5 seconds. Here is what the MFCC spectrogram looks like:
+
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC_MixedAudio_spectrogram.png}
+	\end{tabular}}
+	\caption{Spectrogram for a mixed audio \label{figure26}}
+\end{figure}
+
+
+The predicted class is: children\_playing
+
+\begin{center}
+\begin{tabular}{ |l|r| }
+ \hline
+air\_conditioner &  0.03\% \\
+car\_horn            &  0.02\% \\
+children\_playing    & 69.43\% \\
+dog\_bark            & 15.47\% \\
+drilling            &  0.48\% \\
+engine\_idling       &  0.45\% \\
+gun\_shot            & 11.01\% \\
+jackhammer          &  0.00\% \\
+siren               &  2.32\% \\
+street\_music        &  0.80\% \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+Using this current model (with overall accuracy of 86.30\%), we were about to identify the presence of gunshot sound within the children playing. But we wonder if we can improve the model accuracy further by increasing the number of MFCC bins. Thus next, we will explore this parameter.
+
+
+Our approach is to increase the MFCC bin size from 40 to 60 to extract more features from the audio file. And due to the increase in features, we needed more epochs to train the model.
+
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+    n\_mfcc = 60 \\
+    num\_epochs = 200 \\
+    num\_batch\_size = 64 \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC60_CNN_Model.png}
+	\end{tabular}}
+	\caption{CNN Model for n\_mfcc=60 \label{figure27}}
+\end{figure}
+
+\begin{center}
+\begin{tabular}{ |l| }
+ \hline
+Training Accuracy:  0.97848225 \\
+Testing Accuracy:  0.90434784 \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC60_Epoch_Accuracy.png}
+	\end{tabular}}
+	\caption{Accuracy for CNN Model with n\_mfcc=60 \label{figure28}}
+\end{figure}
+
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC60_Epoch_Loss.png}
+	\end{tabular}}
+	\caption{Loss for CNN Model for n\_mfcc=60 \label{figure29}}
+\end{figure}
+
+\newpage
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC60_CNN_Model_Test_Accuracy_Grid.png}
+	\end{tabular}}
+\end{figure}
+
+
+\begin{figure}[ht]
+	\centerline{\begin{tabular}{c}
+			\includegraphics[width=7cm]{pic/MFCC60_Confusion_Matrix.png}
+	\end{tabular}}
+	\caption{Confusion Matrix for model using n\_mfcc=60 \label{figure30}}
+\end{figure}
+
+
+\newpage
+With the increase in the number of MFCC bins, we were able to improve the overall model accuracy from 86.30\% to 90.40\%. An improvement in accuracy by 7.23\% with 2.50\% increase in total params in the model.
+
+
+
+The predicted class is: children\_playing
+
+\begin{center}
+\begin{tabular}{ |l|r| }
+ \hline
+air\_conditioner &  0.08\% \\
+car\_horn            &  0.00\% \\
+children\_playing    & 98.15\% \\
+dog\_bark            & 0.52\% \\
+drilling            &  0.11\% \\
+engine\_idling       &  0.14\% \\
+gun\_shot            & 0.85\% \\
+jackhammer          &  0.01\% \\
+siren               &  0.06\% \\
+street\_music        &  0.07\% \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+We observed that the improvement in model accuracy has increase the prediction probability for the children playing class. And the second highest probability is the gun shot sound that we have overlay-ed on top of children playing.
+
+
 
 
 
@@ -338,22 +639,33 @@ From figure below, we observe that our LSTM model achieve 78.69\% accuracy on va
 %\end{figure*}
 
 
-
+\newpage
 \section{Conclusions}
 \label{sec:conclusions}
 
 % Summarize your key results. What are limitations of your approach? Suggest ideas for future extensions of your ideas.
+With findings above, we summarize our classification performance as following table:
 
 \begin{table}[tbh]
 	\caption{The performance comparison.}\label{table1} \centerline{
 		\begin{tabular}{clc|r}
 			\hline\hline
-			Approach & Ref.  & Ref. \cite{URBANSOUND8K-DATASET} & Proposed approach\\
-			Metric A & $0.8181$ & $0.9171$ & $0.9616$ \\\hline
-			Metric B & $0.8236$ & $0.7654$ & $0.8615$ \\\hline
+			Approaches & Classification Accuracy\\
+			Conv1D & $0.2437$\\\hline
+			Autoencoder & $0.3048$ \\\hline
+			LSTM & $0.7869$ \\\hline
+			MFCC NN & $0.9043$ \\\hline
 		\end{tabular}
 	}
 \end{table}
+
+From experiments, we can conclude following ideas:
+1. MFCC converts time series signal to frequency domain, which in this case, well suit for classification.
+2. But if time series signal isn't well suit, as maybe it doesn't have clear frequency bands within the signal, then LSTM probably can handle those time series signals well enough. At least, it is able to handle time series signal without special handling in this case.
+3. autoencoder is interesting to use especially when no clear data labelling.
+4. conv1d isn't performed well, if compared to LSTM, which means that memory unit designed in LSTM does have advantage over normal convolution network.
+
+
 
 
 \bibliographystyle{IEEEbib}
